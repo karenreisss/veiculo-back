@@ -12,6 +12,9 @@ public class VeiculoService {
     @Autowired
     private VeiculoRepository veiculoRepository;
 
+    @Autowired
+    private AcessorioRepository acessorioRepository;
+
     public List<Veiculo> listarTodos() {
         return veiculoRepository.findAll();
     }
@@ -21,6 +24,11 @@ public class VeiculoService {
     }
 
     public Veiculo salvar(Veiculo veiculo) {
+        if (veiculo.getAcessorio() != null && veiculo.getAcessorio().getId() != null) {
+            Acessorio acessorio = acessorioRepository.findById(veiculo.getAcessorio().getId())
+                    .orElseThrow(() -> new RuntimeException("Acessorio nao encontrado"));
+            veiculo.setAcessorio(acessorio);
+        }
         return veiculoRepository.save(veiculo);
     }
 
@@ -30,12 +38,19 @@ public class VeiculoService {
 
     public Veiculo atualizarVeiculo(Long id, Veiculo veiculo) {
         Veiculo veiculoExistente = veiculoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Veiculo não encontrado com o id: " + id));
+                .orElseThrow(() -> new RuntimeException("Veiculo nao encontrado com o id: " + id));
 
         veiculoExistente.setModelo(veiculo.getModelo());
         veiculoExistente.setAnoFabricacao(veiculo.getAnoFabricacao());
         veiculoExistente.setPlaca(veiculo.getPlaca());
 
+        if (veiculo.getAcessorio() != null && veiculo.getAcessorio().getId() != null) {
+            Acessorio acessorio = acessorioRepository.findById(veiculo.getAcessorio().getId())
+                    .orElseThrow(() -> new RuntimeException("Acessorio nao encontrado"));
+            veiculoExistente.setAcessorio(acessorio);
+        }
+
         return veiculoRepository.save(veiculoExistente);
     }
 }
+

@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Veiculo {
@@ -14,6 +15,9 @@ public class Veiculo {
     private String modelo;
     private Integer anoFabricacao;
     private String placa;
+
+    @ManyToOne
+    private Acessorio acessorio;
 
     // Getters e Setters
     public Long getId() {
@@ -46,5 +50,13 @@ public class Veiculo {
 
     public void setPlaca(String placa) {
         this.placa = placa;
+    }
+
+    public Acessorio getAcessorio() {
+        return acessorio;
+    }
+
+    public void setAcessorio(Acessorio acessorio) {
+        this.acessorio = acessorio;
     }
 }
